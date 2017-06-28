@@ -60,6 +60,10 @@ type Config struct {
 
 	// Scope specifies optional requested permissions.
 	Scopes []string
+
+	// Hd specifies a domain that users can use to login (google api)
+	// https://developers.google.com/identity/protocols/OpenIDConnect#hd-param
+	Hd string
 }
 
 // A TokenSource is anything that can return a token.
@@ -132,6 +136,7 @@ func (c *Config) AuthCodeURL(state string, opts ...AuthCodeOption) string {
 		"redirect_uri":  internal.CondVal(c.RedirectURL),
 		"scope":         internal.CondVal(strings.Join(c.Scopes, " ")),
 		"state":         internal.CondVal(state),
+		"hd":            internal.CondVal(c.Hd),
 	}
 	for _, opt := range opts {
 		opt.setValue(v)
